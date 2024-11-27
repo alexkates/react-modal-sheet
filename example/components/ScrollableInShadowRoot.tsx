@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Sheet } from 'react-modal-sheet';
 
 import { Button } from './common';
@@ -7,8 +7,7 @@ const SHADOW_ROOT_ID = 'shadow-root';
 
 export function ScrollableInShadowRoot() {
   const [isOpen, setOpen] = useState(false);
-  const shadowRootRef = useRef<ShadowRoot | null>(null);
-  const shadowHostRef = useRef<HTMLDivElement | null>(null);
+  const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
 
   useEffect(() => {
     // Create a shadow DOM root dynamically if it doesn't already exist
@@ -19,14 +18,20 @@ export function ScrollableInShadowRoot() {
       document.body.appendChild(shadowHost);
     }
 
-    if (!shadowHostRef.current) {
-      shadowHostRef.current = shadowHost as HTMLDivElement;
+    // Attach shadow root and update state
+    if (!shadowRoot) {
+      const root = shadowHost.attachShadow({ mode: 'open' });
+      setShadowRoot(root);
     }
 
-    if (!shadowRootRef.current) {
-      shadowRootRef.current = shadowHost.attachShadow({ mode: 'open' });
-    }
-  }, []);
+    return () => {
+      // Clean up the shadow root when the component is unmounted
+      if (shadowRoot) {
+        shadowRoot.host.remove();
+        setShadowRoot(null);
+      }
+    };
+  }, [shadowRoot]);
 
   const open = () => setOpen(true);
   const close = () => setOpen(false);
@@ -35,12 +40,12 @@ export function ScrollableInShadowRoot() {
     <>
       <Button onClick={open}>Scrollable Bottom Sheet in a Shadow Root</Button>
 
-      {/* Conditionally render when shadowRoot is ready */}
-      {shadowRootRef.current && (
+      {/* Render the Sheet only when the shadowRoot is ready */}
+      {shadowRoot && (
         <Sheet
           isOpen={isOpen}
           onClose={close}
-          mountPoint={shadowRootRef.current as unknown as HTMLElement}
+          mountPoint={shadowRoot as unknown as HTMLElement}
         >
           <Sheet.Container>
             <Sheet.Header />
