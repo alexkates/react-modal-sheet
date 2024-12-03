@@ -3,24 +3,24 @@ import { Sheet } from 'react-modal-sheet';
 
 import { Button } from './common';
 
-const SHADOW_ROOT_ID = 'shadow-root';
+const SHADOW_ROOT_ID = 'react-modal-sheet-shadow-root';
 
-export function ScrollableInShadowRoot() {
+export function ScrollableShadowDOM() {
   const [isOpen, setOpen] = useState(false);
   const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
 
   useEffect(() => {
     // Create a shadow DOM root dynamically if it doesn't already exist
-    let shadowHost = document.getElementById(SHADOW_ROOT_ID);
-    if (!shadowHost) {
-      shadowHost = document.createElement('div');
-      shadowHost.id = SHADOW_ROOT_ID;
-      document.body.appendChild(shadowHost);
+    let shadowRootContainer = document.getElementById(SHADOW_ROOT_ID);
+    if (!shadowRootContainer) {
+      shadowRootContainer = document.createElement('div');
+      shadowRootContainer.id = SHADOW_ROOT_ID;
+      document.body.appendChild(shadowRootContainer);
     }
 
     // Attach shadow root and update state
     if (!shadowRoot) {
-      const root = shadowHost.attachShadow({ mode: 'open' });
+      const root = shadowRootContainer.attachShadow({ mode: 'open' });
       setShadowRoot(root);
     }
 
@@ -38,7 +38,7 @@ export function ScrollableInShadowRoot() {
 
   return (
     <>
-      <Button onClick={open}>Scrollable Bottom Sheet in a Shadow Root</Button>
+      <Button onClick={open}>Scrollable + Shadow DOM</Button>
 
       {/* Render the Sheet only when the shadowRoot is ready */}
       {shadowRoot && (

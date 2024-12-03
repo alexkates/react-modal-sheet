@@ -25,7 +25,7 @@ import { DisableDrag } from './DisableDrag';
 import { ScrollableSnapPoints } from './ScrollableSnapPoints';
 import { ContentHeight } from './ContentHeight';
 import { AvoidKeyboard } from './AvoidKeyboard';
-import { ScrollableInShadowRoot } from './ScrollableInShadowRoot';
+import { ScrollableShadowDOM } from './ScrollableShadowDOM';
 
 export function App() {
   return (
@@ -56,10 +56,10 @@ export function App() {
       />
 
       <Route
-        path="scrollable-shadow-root/*"
+        path="scrollable-shadow-dom/*"
         element={
           <Screen bg="light">
-            <ScrollableInShadowRoot />
+            <ScrollableShadowDOM />
           </Screen>
         }
       />
@@ -166,9 +166,9 @@ const ExampleSelector = () => {
       </li>
 
       <li>
-        <ExampleLink to="scrollable-shadow-root">
+        <ExampleLink to="scrollable-shadow-dom">
           <ScrollIcon size={48} />
-          <span>Scrollable in shadow root</span>
+          <span>Scrollable (in a Shadow DOM)</span>
         </ExampleLink>
       </li>
 
